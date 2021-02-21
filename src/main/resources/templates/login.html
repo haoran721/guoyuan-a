@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>理赔未决清单跟踪</title>
+    <!-- 新 Bootstrap4 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+    <!-- bootstrap.bundle.min.js 用于弹窗、提示、下拉菜单，包含了 popper.min.js -->
+    <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+
+    <!-- 最新的 Bootstrap4 核心 JavaScript 文件 -->
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <!--<link rel="stylesheet" type="text/css" href="/resources/static/layui/css/Login.css"/>-->
+    <style>
+        html{
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-style: normal;
+        }
+        body{
+            width: 100%;
+            height: 100%;
+            font-family: 'Open Sans',sans-serif;
+            margin: 0;
+            background-color: #4A374A;
+        }
+        #login{
+            position: absolute;
+            top: 50%;
+            left:50%;
+            margin: -150px 0 0 -150px;
+            width: 300px;
+            height: 300px;
+        }
+        #login h1{
+            color: #fff;
+            text-shadow:0 0 10px;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+        h1{
+            font-size: 2em;
+            margin: 0.67em 0;
+        }
+        input{
+            width: 278px;
+            height: 18px;
+            margin-bottom: 10px;
+            outline: none;
+            padding: 10px;
+            font-size: 13px;
+            color: #fff;
+            border-top: 1px solid #312E3D;
+            border-left: 1px solid #312E3D;
+            border-right: 1px solid #312E3D;
+            border-bottom: 1px solid #56536A;
+            border-radius: 4px;
+            background-color: #2D2D3F;
+        }
+        .but{
+            width: 300px;
+            min-height: 20px;
+            display: block;
+            background-color: #4a77d4;
+            border: 1px solid #3762bc;
+            color: #fff;
+            padding: 9px 14px;
+            font-size: 15px;
+            line-height: normal;
+            border-radius: 5px;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+<div id="login">
+    <h1>Login</h1>
+    <form role="form" action = "/loginIn" method="post">
+        <input type="text" required="required" placeholder="账号" name="agentcode" id="agentcode"></input>
+        <input type="password" required="required" placeholder="密码" name="password" id="password"></input>
+    </form>
+    <button class="but" type="submit" id="check">登录</button>
+    <script >
+        //字符串判空方法
+        function isBlank(str){
+            if(str == "" || str == null || str == undefined){
+                return true;
+            }else {
+                return false;
+            }
+        }
+        //添加用户js响应事件
+        $("#check").click(function(){
+            var agentcode = $("#agentcode").val();
+            var password = $("#password").val();
+            //判断是否有未填项
+            if(isBlank(agentcode) || isBlank(password) ){
+                window.confirm("请完善登录信息");
+                location.href = "login";
+            }else {
+                var param = {
+                    "agentcode": agentcode,
+                    "password": password
+                };
+                $.ajax({
+                    type:"POST",
+                    url:"/loginIn", //请求url
+                    data: param,    //请求参数
+                    async: false,    //是否异步
+                    success: function(data) {
+                        if(data.result=="error"){
+                            window.alert("用户名或密码错误！");
+                            location.href = "login";    //重新加载界面
+                        }else {
+                            location.href = "/policy";
+                        }
+                    }
+                });
+
+            }
+        });
+    </script>
+</div>
+<!--<form role="form" action = "/loginIn" method="post">
+        账号：<input type="text" id="agentcode" name = "agentcode"> <br>
+        密码：<input type="password" id = "password" name = "password"> <br>
+        &lt;!&ndash;机构：<input type="text" id="comcode" name = "comcode"> <br>&ndash;&gt;
+        <input type="submit" id = "login" value = "login">
+    </form>-->
+<script>
+
+</script>
+</body>
+</html>
